@@ -15,9 +15,7 @@ const Footer = () => {
                 <li><a href="/blogs" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Blogs</a></li>
                 <li><a href="/contact-us" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Contact Us</a></li>
               </ul>
-              <div className="mt-4">
-                <p><a href="/covid-19-awareness" target="_blank" className="hover:text-gray-400">Covid-19 Awareness</a></p>
-              </div>
+            
             </div>
             <div>
               <h6 className="font-semibold mb-4">Courses</h6>
@@ -31,9 +29,6 @@ const Footer = () => {
               <h6 className="font-semibold mb-4">Quick Links</h6>
               <ul className="space-y-2">
                 <li><a href="/login" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Login</a></li>
-                <li><a href="/privacy-policy" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Privacy Policy</a></li>
-                <li><a href="/terms-and-conditions" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Terms & Conditions</a></li>
-                <li><a href="/security-policy" className="flex items-center hover:text-gray-400"><FaChevronRight className="mr-2" /> Security</a></li>
               </ul>
             </div>
             <div>

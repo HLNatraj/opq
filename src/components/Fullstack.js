@@ -1,11 +1,65 @@
 import React, { useState } from 'react';
 import { FaLaptopCode, FaUsers, FaProjectDiagram, FaQuestionCircle, FaArrowRight } from 'react-icons/fa';
+import ReCAPTCHA from 'react-google-recaptcha'; // Import reCAPTCHA component
 
 const Fullstack = () => {
   const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    contact: '',
+    city: '',
+  });
+  const [captchaToken, setCaptchaToken] = useState(''); // State for reCAPTCHA token
 
   const handleFormToggle = () => {
     setShowForm(!showForm);
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token); // Set reCAPTCHA token
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { name, email, contact, city } = formData;
+    if (!name || !email || !contact || !city || !captchaToken) { // Validate CAPTCHA token
+      alert('All fields are required and CAPTCHA must be completed.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/Fullstackcourse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...formData, captchaToken }), // Include CAPTCHA token in request
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        setShowForm(false); // Close the form on successful submission
+        setFormData({
+          name: '',
+          email: '',
+          contact: '',
+          city: '',
+        });
+        setCaptchaToken(''); // Clear CAPTCHA token
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while submitting the form.');
+    }
   };
 
   return (
@@ -15,12 +69,11 @@ const Fullstack = () => {
         <div className="relative container mx-auto text-center z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Full Stack Developer</h1>
           <ol className="breadcrumb text-center">
-            <li className="breadcrumb-item"><a href="/">Course</a></li>
             <li className="breadcrumb-item active text-white" aria-current="page">Course Information</li>
           </ol>
         </div>
       </section>
-      
+
       <div className="container mx-auto p-4 flex flex-col md:flex-row">
         <div className="md:w-2/3 p-4">
           <div className="course-overview">
@@ -68,13 +121,13 @@ const Fullstack = () => {
             </ol>
           </div>
         </div>
-        
+
         <div className="md:w-1/3 p-4 sticky top-16 max-h-screen">
           <div className="card border p-4 rounded bg-white shadow-md">
             <div className="card-body">
               <img src="https://api.opqbootcamp.com/ImgUpload/873224_f1.jpg" alt="img" className="w-full h-auto border rounded mb-4" />
               <div className="mt-4 mb-4">
-                <button onClick={handleFormToggle} className="w-full bg-gray-500 text-white py-2 rounded mb-4 flex items-center justify-between">
+                <button onClick={handleFormToggle} className="w-full bg-red-500 px-4 text-white py-2 rounded mb-4 flex items-center justify-between">
                   <span>Enroll Now</span>
                   <FaArrowRight />
                 </button>
@@ -123,22 +176,28 @@ const Fullstack = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h2 className="text-2xl font-bold mb-4">Enrollment Form</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
-                <input type="text" id="name" className="w-full border border-gray-300 rounded px-3 py-2" />
+                <input type="text" id="name" value={formData.name} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
               </div>
               <div className="mb-4">
                 <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
-                <input type="email" id="email" className="w-full border border-gray-300 rounded px-3 py-2" />
+                <input type="email" id="email" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
               </div>
               <div className="mb-4">
                 <label htmlFor="contact" className="block text-sm font-medium mb-1">Contact Number</label>
-                <input type="text" id="contact" className="w-full border border-gray-300 rounded px-3 py-2" />
+                <input type="text" id="contact" value={formData.contact} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
               </div>
               <div className="mb-4">
                 <label htmlFor="city" className="block text-sm font-medium mb-1">City</label>
-                <input type="text" id="city" className="w-full border border-gray-300 rounded px-3 py-2" />
+                <input type="text" id="city" value={formData.city} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
+              </div>
+              <div className="mb-4">
+                <ReCAPTCHA
+                  sitekey="6LfL7SMqAAAAAPqHxtrhQhbTav4zheZlHfDrwgAa" 
+                  onChange={handleCaptchaChange}
+                />
               </div>
               <div className="flex justify-end">
                 <button type="button" onClick={handleFormToggle} className="mr-2 bg-gray-500 text-white px-4 py-2 rounded">Close</button>

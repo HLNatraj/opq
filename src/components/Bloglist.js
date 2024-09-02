@@ -6,9 +6,9 @@ const blogs = [
     id: 1,
     title: 'Understanding React Hooks',
     excerpt: 'React Hooks are functions that let you use state and other React features without writing a class.',
-    image: '/react.png',
+    image: '/hookss.png',
     date: 'July 25, 2024',
-    link: '/blogs/react-hooks'
+    link: '/blogs/hooks'
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const blogs = [
     excerpt: 'Tailwind CSS is a utility-first CSS framework that provides low-level utility classes.',
     image: '/tailwind.png',
     date: 'July 20, 2024',
-    link: '/blogs/tailwind-css'
+    link: '/blogs/tailwind'
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const blogs = [
     excerpt: 'Promises are a modern alternative to callbacks for handling asynchronous operations in JavaScript.',
     image: '/promises.png',
     date: 'July 15, 2024',
-    link: '/blogs/javascript-promises'
+    link: '/blogs/promises'
   }
 ];
 
@@ -52,7 +52,7 @@ const Bloglist = () => {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl font-bold mb-4"
+            className="text-4xl font-bold mb-4 text-blue-700"
           >
             Our Blogs
           </motion.h1>
@@ -75,7 +75,7 @@ const Bloglist = () => {
               transition={{ duration: 0.6 }}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <img src={blog.image} alt={blog.title} className="w-full h-48 object-cover" />
+              <img src={blog.image} alt={blog.title} className="w-full h-48 object-contain" />
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-2">{blog.title}</h2>
                 <p className="text-gray-600 mb-4">{blog.excerpt}</p>

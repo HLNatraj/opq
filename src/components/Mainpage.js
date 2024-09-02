@@ -4,9 +4,8 @@ import Home from './Home';
 import Aboutus from './Aboutus';
 import Courses from './Courses';
 import Bloglist from './Bloglist';
-import Workshop from './Workshop';
 import Contact from './Contact';
-import Faq from './Faq';
+
 
 
 const MainPage = () => {
@@ -16,10 +15,7 @@ const MainPage = () => {
       <Aboutus />
       <Courses />
       <Bloglist />
-      <Workshop />
       <Contact />
-      <Faq />
-     
     </>
   );
 };

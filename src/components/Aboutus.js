@@ -39,14 +39,14 @@ const Aboutus = () => {
             <div className="flex items-center space-x-4">
               <img src="/path/to/team-member1.jpg" alt="Team Member 1" className="w-16 h-16 rounded-full" />
               <div>
-                <h3 className="text-lg font-medium">ABCD</h3>
+                <h3 className="text-lg font-medium">Naren</h3>
                 <p className="text-gray-600">Founder & CEO</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <img src="/path/to/team-member2.jpg" alt="Team Member 2" className="w-16 h-16 rounded-full" />
               <div>
-                <h3 className="text-lg font-medium">ABCD</h3>
+                <h3 className="text-lg font-medium">Naren</h3>
                 <p className="text-gray-600">Chief Operating Officer</p>
               </div>
             </div>

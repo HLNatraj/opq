@@ -2,78 +2,77 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const [adminId, setAdminId] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+const AdminLogin = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        adminId,
-        password,
-      });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
-      if (response.data.success) {
-        navigate('/dashboard'); // Replace with your target route
-      } else {
-        setMessage('Invalid Admin ID or Password');
-      }
-    } catch (error) {
-      setMessage('Invalid Admin ID or Password');
-    }
-  };
+        try {
+            const response = await axios.post('http://localhost:8000/api/login', {
+                username,
+                password
+            });
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center">Admin Login</h2>
-        {message && <p className="text-center text-red-500">{message}</p>}
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="admin-id" className="sr-only">Admin ID</label>
-              <input
-                id="admin-id"
-                name="adminId"
-                type="text"
-                autoComplete="admin-id"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Admin ID"
-                value={adminId}
-                onChange={(e) => setAdminId(e.target.value)}
-              />
+            // Save token to localStorage
+            localStorage.setItem('user_token', response.data.token);
+
+            // Redirect to the admin dashboard
+            navigate('/admin/admindashboard');
+
+        } catch (error) {
+            setError('Invalid username or password');
+            console.error('Login error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+                <h1 className="text-2xl font-bold mb-6 text-center">Admin Login</h1>
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label htmlFor="username" className="block text-gray-700">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <div className="mb-6">
+                        <label htmlFor="password" className="block text-gray-700">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                </form>
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Sign In
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
-export default Login;
+export default AdminLogin;

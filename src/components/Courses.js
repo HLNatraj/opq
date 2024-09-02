@@ -1,11 +1,10 @@
-// Course.js
 import React from 'react';
 
 const courses = [
   {
     title: 'Full Stack Developer Course',
     description: 'Full Stack Developer Course helps you to master in the React JS, Express, Node.js, Mongo DB, and Python',
-    imageUrl: '/Fullstack.jfif',
+    imageUrl: '/fullstack.webp',
     link: '/courses/full-stack-developer',
   },
   {
@@ -23,14 +22,14 @@ const courses = [
 ];
 
 const CourseCard = ({ title, description, imageUrl, link }) => (
-  <div className="card mb-6">
-    <div className="relative">
-      <a href={link}>
-        <img src={imageUrl} alt="img" className="w-full h-48 object-cover"/>
-      </a>
-    </div>
+  <div className="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+    <a href={link}>
+      <img src={imageUrl} alt={title} className="w-full h-48 object-contain" />
+    </a>
     <div className="p-4">
-      <h4 className="text-xl mb-2"><a href={link} className="text-dark">{title}</a></h4>
+      <h4 className="text-xl font-semibold mb-2">
+        <a href={link} className="text-dark hover:text-blue-600">{title}</a>
+      </h4>
       <p className="text-gray-600">{description}</p>
     </div>
     <div className="p-4 border-t">
@@ -40,17 +39,12 @@ const CourseCard = ({ title, description, imageUrl, link }) => (
 );
 
 const Courses = () => (
-  <section className="sptb bg-white course-listing py-12">
+  <section className="bg-white py-12">
     <div className="container mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <div>
-          <h2 className="text-3xl font-semibold">Courses</h2>
+          <h2 className="text-3xl font-semibold mb-2 text-blue-700">Courses</h2>
           <p className="text-lg text-gray-700">Professional technical skill development programs designed to help you reach your goals.</p>
-        </div>
-        <div className="mt-4 md:mt-0">
-          <a className="btn btn-primary mt-3 text-white bg-blue-500 py-2 px-4 rounded" href="/course-listing">
-            <i className="fe fe-arrow-right mr-2"></i>View All
-          </a>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -63,6 +57,11 @@ const Courses = () => (
             link={course.link}
           />
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <a href="/courses1" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+          View All Courses
+        </a>
       </div>
     </div>
   </section>

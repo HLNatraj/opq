@@ -1,9 +1,65 @@
 // src/Contact.js
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Contact = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        contact: '',
+        message: '',
+        recaptcha: '',
+    });
+
+    const [formErrors, setFormErrors] = useState({});
+
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.name) errors.name = 'Name is required';
+        if (!formData.email) errors.email = 'Email is required';
+        if (!formData.contact) errors.contact = 'Contact Number is required';
+        if (!formData.message) errors.message = 'Message is required';
+        if (!formData.recaptcha) errors.recaptcha = 'Please complete the reCAPTCHA';
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/Quickresponse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('Your enquiry has been submitted successfully.');
+                setFormData({
+                    name: '',
+                    email: '',
+                    contact: '',
+                    message: '',
+                    recaptcha: '',
+                });
+                window.location.reload(); 
+            } 
+            else {
+                alert('There was an issue submitting your enquiry. Please try again later.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An error occurred. Please try again later.');
+        }
+    };
+
     return (
         <>
             <section className="relative bg-cover bg-center text-white py-16 mt-16" style={{ backgroundImage: 'url(/blog1.jfif)' }}>
@@ -102,7 +158,7 @@ const Contact = () => {
                                     <div className="mb-6 text-dark">
                                         <h5 className="text-2xl font-semibold">Quick Enquiry</h5>
                                     </div>
-                                    <form id="contactus" method="post" action="/contact-us" noValidate>
+                                    <form id="contactus" onSubmit={handleSubmit} noValidate>
                                         <div className="name mb-4">
                                             <input 
                                                 type="text" 
@@ -112,50 +168,62 @@ const Contact = () => {
                                                 placeholder="Name" 
                                                 maxLength="100" 
                                                 name="Name" 
+                                                value={formData.name}
+                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                                 required 
                                             />
-                                            <span className="text-danger field-validation-valid" data-valmsg-for="Name"></span>
+                                            {formErrors.name && <span className="text-danger">{formErrors.name}</span>}
                                         </div>
                                         <div className="mail mb-4">
                                             <input 
                                                 type="email" 
-                                                id="txtMail" 
+                                                id="txtEmail" 
                                                 autoComplete="off" 
                                                 className="form-control" 
                                                 placeholder="Email" 
                                                 maxLength="100" 
-                                                name="EmailId" 
+                                                name="Email" 
+                                                value={formData.email}
+                                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 required 
                                             />
-                                            <span className="text-danger field-validation-valid" data-valmsg-for="EmailId"></span>
+                                            {formErrors.email && <span className="text-danger">{formErrors.email}</span>}
                                         </div>
-                                        <div className="mail mb-4">
+                                        <div className="number mb-4">
                                             <input 
-                                                type="tel" 
-                                                id="txtNo" 
+                                                type="text" 
+                                                id="txtPhone" 
                                                 autoComplete="off" 
                                                 className="form-control" 
                                                 placeholder="Contact Number" 
                                                 maxLength="15" 
-                                                name="ContactNo" 
+                                                name="Phone" 
+                                                value={formData.contact}
+                                                onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                                                 required 
                                             />
-                                            <span className="text-danger field-validation-valid" data-valmsg-for="ContactNo"></span>
+                                            {formErrors.contact && <span className="text-danger">{formErrors.contact}</span>}
                                         </div>
                                         <div className="message mb-4">
                                             <textarea 
-                                                rows="3" 
-                                                id="txtMessage" 
-                                                autoComplete="off" 
-                                                placeholder="Type your query here" 
                                                 className="form-control" 
                                                 name="Message" 
+                                                placeholder="Message" 
+                                                maxLength="1000" 
+                                                value={formData.message}
+                                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                                 required
                                             ></textarea>
+                                            {formErrors.message && <span className="text-danger">{formErrors.message}</span>}
                                         </div>
-                                        <div className="submit">
-                                            <input type="submit" className="btn btn-primary" id="btnSave" value="Submit" />
+                                        <div className="captcha mb-4">
+                                            <ReCAPTCHA
+                                                sitekey="6LfL7SMqAAAAAPqHxtrhQhbTav4zheZlHfDrwgAa"
+                                                onChange={(value) => setFormData({ ...formData, recaptcha: value })}
+                                            />
+                                            {formErrors.recaptcha && <span className="text-danger">{formErrors.recaptcha}</span>}
                                         </div>
+                                        <button type="submit" className="btn btn-primary">Send</button>
                                     </form>
                                 </div>
                             </div>

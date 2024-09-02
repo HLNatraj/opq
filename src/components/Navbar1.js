@@ -16,7 +16,7 @@ const Navbar1 = () => {
           <Link to="/" className="text-black hover:text-blue-500 px-4 py-2">Home</Link>
         </li>
         <li>
-          <Link to="/about-us" className="text-black hover:text-blue-500 px-4 py-2">About Us</Link>
+          <Link to="/about-us" className="text-black hover:text-blue-500 px-4 py-2">About</Link>
         </li>
         <Menu as="div" className="relative inline-block text-left">
           {({ open }) => (
@@ -115,6 +115,9 @@ const Navbar1 = () => {
         <li>
           <Link to="/login" className="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600">Login</Link>
         </li>
+        {/* <li>
+          <Link to="/Batchlist" className="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600">batch_list</Link>
+        </li> */}
       </ul>
     </nav>
   );
